@@ -135,7 +135,7 @@ class FeedEdit extends Component {
 
   render() {
     return this.props.editing ? (
-      <Fragment>
+      <>
         <Backdrop onClick={this.cancelPostChangeHandler} />
         <Modal
           title="New Post"
@@ -183,7 +183,7 @@ class FeedEdit extends Component {
             />
           </form>
         </Modal>
-      </Fragment>
+      </>
     ) : null;
   }
 }
