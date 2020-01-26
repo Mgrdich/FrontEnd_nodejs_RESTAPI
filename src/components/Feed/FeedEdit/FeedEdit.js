@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import Backdrop from '../../Backdrop/Backdrop';
 import Modal from '../../Modal/Modal';
@@ -92,7 +92,7 @@ class FeedEdit extends Component {
       }
       return {
         postForm: updatedForm,
-        formIsValid: formIsValid
+        formIsValid: true
       };
     });
   };

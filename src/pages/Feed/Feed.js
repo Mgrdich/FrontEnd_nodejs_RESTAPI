@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 
 import Post from '../../components/Feed/Post/Post';
 import Button from '../../components/Button/Button';
@@ -61,7 +61,9 @@ class Feed extends Component {
             })
             .then(resData => {
                 this.setState({
-                    posts: resData.posts,
+                    posts: resData.posts.map(p => {
+                        return {...p, imagePath: p.imageUrl}
+                    }),
                     totalPosts: resData.totalItems,
                     postsLoading: false
                 });
@@ -110,23 +112,21 @@ class Feed extends Component {
         // Set up data (with image!)
         let url = `${URL}/feed/posts`;
         let method = 'POST';
-        if (this.state.editPost) {
-            url = 'URL';
-        }
 
         const formData = new FormData();
         formData.append('title', postData.title);
         formData.append('content', postData.content);
         formData.append('image', postData.image);
+        console.log(postData.image);
+
+        if (this.state.editPost) {
+            url = `${URL}/feed/posts/${this.state.editPost._id}`;
+            method = 'PUT';
+        }
+
         fetch(url, {
             method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: postData.title,
-                content: postData.content
-            })
+            body: formData
         })
             .then(res => {
                 if (res.status !== 200 && res.status !== 201) {
@@ -177,7 +177,9 @@ class Feed extends Component {
 
     deletePostHandler = postId => {
         this.setState({postsLoading: true});
-        fetch('URL')
+        fetch(`${URL}/feed/posts/${postId}`, {
+            method: 'DELETE'
+        })
             .then(res => {
                 if (res.status !== 200 && res.status !== 201) {
                     throw new Error('Deleting a post failed!');
@@ -207,7 +209,7 @@ class Feed extends Component {
 
     render() {
         return (
-            <Fragment>
+            <>
                 <ErrorHandler error={this.state.error} onHandle={this.errorHandler}/>
                 <FeedEdit
                     editing={this.state.isEditing}
@@ -267,7 +269,7 @@ class Feed extends Component {
                         </Paginator>
                     )}
                 </section>
-            </Fragment>
+            </>
         );
     }
 }
