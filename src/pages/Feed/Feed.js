@@ -52,7 +52,7 @@ class Feed extends Component {
             this.setState({postPage: page});
         }
 
-        fetch(`${URL}/feed/posts`) //TODO convert it into function
+        fetch(`${URL}/feed/posts?page=${page}`)
             .then(res => {
                 if (res.status !== 200) {
                     throw new Error('Failed to fetch posts.');
@@ -117,7 +117,7 @@ class Feed extends Component {
         formData.append('title', postData.title);
         formData.append('content', postData.content);
         formData.append('image', postData.image);
-        console.log(postData.image);
+        /*console.log(postData.image);*/
 
         if (this.state.editPost) {
             url = `${URL}/feed/posts/${this.state.editPost._id}`;
